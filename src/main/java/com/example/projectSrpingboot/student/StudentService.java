@@ -1,30 +1,30 @@
 package com.example.projectSrpingboot.student;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
+@Slf4j
 public class StudentService {
 
     public final StudentRepository studentRepository;
-
-    @Autowired
-    public StudentService(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
 
     public List<Student> getStudents() {
         return studentRepository.findAll();
     }
 
     public void addNewStudent(Student student) {
+        log.info("Create students service called");
         Optional<Student> studentOptional = studentRepository.findStudentsByEmail(student.getEmail());
+
         if(studentOptional.isPresent()){
             throw new IllegalStateException("email taken");
         }
