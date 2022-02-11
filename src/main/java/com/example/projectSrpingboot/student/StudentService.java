@@ -1,8 +1,10 @@
 package com.example.projectSrpingboot.student;
 
+import com.example.projectSrpingboot.exception.StudentNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,14 +23,14 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public void addNewStudent(Student student) {
+    public Student addNewStudent(Student student) {
         log.info("Create students service called");
         Optional<Student> studentOptional = studentRepository.findStudentsByEmail(student.getEmail());
 
         if(studentOptional.isPresent()){
             throw new IllegalStateException("email taken");
         }
-        studentRepository.save(student);
+        return studentRepository.save(student);
     }
 
     public void deleteStudent(Long studentId) {
@@ -39,10 +41,10 @@ public class StudentService {
         studentRepository.deleteById(studentId);
     }
     @Transactional
-    public void updateStudent(Long studentId, String name, String email){
+    public Student updateStudent(Long studentId, String name, String email){
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(
-                        ()-> new IllegalStateException("student with ID "+ studentId + " does not exists")
+                        ()-> new StudentNotFoundException("student with ID "+ studentId + " does not exists")
                 );
         if(name != null
                 && name.length()>0
@@ -58,6 +60,6 @@ public class StudentService {
             }
             student.setEmail(email);
         }
-        studentRepository.save(student);
+        return studentRepository.save(student);
     }
 }
