@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -24,14 +23,14 @@ public class Student implements Serializable {
             strategy = GenerationType.AUTO
     )
     private Long id;
-    @NotEmpty
-    @Size(min = 3,message = "please, enter a valid name")
+    @NotEmpty(message = "{name.notempty}")
+    @Size(min = 3,message = "{name.size}")
     private String name;
     @Transient
     private Integer age;
     private LocalDate dateOfBirth;
-    @NotEmpty
-    @Email
+    @NotEmpty(message = "{email.notempty}")
+    @Email(message = "{email.regex}")
     private String email;
 
     public Student(String name,
