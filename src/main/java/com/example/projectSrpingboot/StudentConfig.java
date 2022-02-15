@@ -1,4 +1,4 @@
-package com.example.projectSrpingboot.student;
+package com.example.projectSrpingboot;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

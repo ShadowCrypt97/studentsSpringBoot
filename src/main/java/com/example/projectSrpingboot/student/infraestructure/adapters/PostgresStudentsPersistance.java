@@ -1,10 +1,13 @@
-package com.example.projectSrpingboot.student;
+package com.example.projectSrpingboot.student.infraestructure.adapters;
 
 import com.example.projectSrpingboot.exception.StudentNotFoundException;
+import com.example.projectSrpingboot.student.domain.interfaces.StudentPersistence;
+import com.example.projectSrpingboot.student.infraestructure.StudentRepository;
+import com.example.projectSrpingboot.student.infraestructure.entity.StudentEntity;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -12,20 +15,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Service
+@Repository
+@Qualifier("PostgresAccountPersistence")
 @AllArgsConstructor
 @Slf4j
-public class StudentService {
+public class PostgresStudentsPersistance implements StudentPersistence {
 
     public final StudentRepository studentRepository;
 
-    public List<Student> getStudents() {
+    public List<StudentEntity> getStudents() {
         return studentRepository.findAll();
     }
 
-    public Student addNewStudent(Student student) {
+    public StudentEntity addNewStudent(StudentEntity student) {
         log.info("Create students service called");
-        Optional<Student> studentOptional = studentRepository.findStudentsByEmail(student.getEmail());
+        Optional<StudentEntity> studentOptional = studentRepository.findStudentsByEmail(student.getEmail());
 
         if(studentOptional.isPresent()){
             throw new IllegalStateException("email taken");
@@ -41,8 +45,8 @@ public class StudentService {
         studentRepository.deleteById(studentId);
     }
     @Transactional
-    public Student updateStudent(Long studentId, String name, String email){
-        Student student = studentRepository.findById(studentId)
+    public StudentEntity updateStudent(Long studentId, String name, String email){
+        StudentEntity student = studentRepository.findById(studentId)
                 .orElseThrow(
                         ()-> new StudentNotFoundException("student with ID "+ studentId + " does not exists")
                 );
@@ -54,7 +58,7 @@ public class StudentService {
         if(email != null
                 && email.length()>0
                 && !Objects.equals(student.getEmail(),email)){
-            Optional<Student> studentOptional = studentRepository.findStudentsByEmail(email);
+            Optional<StudentEntity> studentOptional = studentRepository.findStudentsByEmail(email);
             if(studentOptional.isPresent()){
                 throw new IllegalStateException("email taken");
             }
