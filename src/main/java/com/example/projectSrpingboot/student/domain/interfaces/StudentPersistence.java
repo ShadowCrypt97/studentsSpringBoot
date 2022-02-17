@@ -1,5 +1,7 @@
 package com.example.projectSrpingboot.student.domain.interfaces;
 
+import com.example.projectSrpingboot.student.domain.Student;
+import com.example.projectSrpingboot.student.infraestructure.controllers.dto.StudentEntityDto;
 import com.example.projectSrpingboot.student.infraestructure.entity.StudentEntity;
 
 import java.util.List;

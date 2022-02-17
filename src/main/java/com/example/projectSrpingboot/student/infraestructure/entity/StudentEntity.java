@@ -15,8 +15,6 @@ import java.time.Period;
 @Table(name = "student")
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString
 @Data
 public class StudentEntity implements Serializable {
     @Id
@@ -24,16 +22,12 @@ public class StudentEntity implements Serializable {
             strategy = GenerationType.AUTO
     )
     private Long id;
-    @NotEmpty(message = "{name.notempty}")
-    @Size(min = 3,message = "{name.size}")
     private String name;
     @Transient
     private Integer age;
     private LocalDate dateOfBirth;
-    @NotEmpty(message = "{email.notempty}")
-    @Email(message = "{email.regex}")
     private String email;
-    @PrePersist
+
     public Integer getAge() {
         return Period.between(this.dateOfBirth,LocalDate.now()).getYears();
     }
@@ -44,15 +38,6 @@ public class StudentEntity implements Serializable {
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
-    }
-    public Student toStudentAccount(){
-        return Student.builder()
-                .id(this.id)
-                .email(this.email)
-                .age(this.age)
-                .name(this.name)
-                .dateOfBirth(this.dateOfBirth)
-                .build();
     }
 
     public StudentEntity toEntity(Student student) {

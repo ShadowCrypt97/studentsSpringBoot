@@ -1,14 +1,16 @@
 package com.example.projectSrpingboot.student.infraestructure.adapters;
 
 import com.example.projectSrpingboot.exception.StudentNotFoundException;
+import com.example.projectSrpingboot.student.domain.Student;
 import com.example.projectSrpingboot.student.domain.interfaces.StudentPersistence;
 import com.example.projectSrpingboot.student.infraestructure.StudentRepository;
+import com.example.projectSrpingboot.student.infraestructure.controllers.dto.StudentEntityDto;
 import com.example.projectSrpingboot.student.infraestructure.entity.StudentEntity;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
